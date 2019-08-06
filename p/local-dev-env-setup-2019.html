@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>develagasca</title>
+
+    <link rel='stylesheet' href='/static/css/default.css'/>
+  </head>
+
+  <body>
+
+    <article>
+      <h1>Local Development Environment Setup (2019)</h1>
+      <aside><em>2019-08-06</em></aside>
+
+      <hr>
+
+      <p>I'm a web developer and I also regularly reformat and re-install the OS of my computers. Right now, I have access to 3 computers &mdash; a Mac mini at work and both a personal laptop and desktop at home. It's given that my work Mac mini uses macOS. My personal laptop runs on Windows 10 Home and the desktop uses the Pop!OS Linux distribution. That's three different operating systems to setup my local development environment on.</p>
+
+      <p>I use macOS the most, as I spend most of my web development time at the office. But even though macOS is Unix based, I prefer Linux. I like the tooling and the superior package management of Linux.</p>
+
+      <h2>Containerization vs Virtualization</h2>
+      
+      <p>Two ways to use Linux in macOS is either through <em>containerization</em> or <em>virtualization</em>.</p>
+
+      <h3>Docker</h3>
+
+      <p><a href="https://www.docker.com">Docker</a> seemed a good way to go as containers are smaller than virtual machines. And I was happily using it for a time &mdash; until the Docker daemon kept crashing and I had to occasionally reset it every week which deleted all the downloaded Docker images from the system. I also noticed that it would also cause my Mac to randomly stall and freeze for a few minutes.</p>
+
+      <p>Also, although Docker was supported by the major OSes, I only had Windows 10 Home edition on my laptop which does not permit running <a href="https://docs.docker.com/docker-for-windows/">Docker Desktop for Windows</a> natively unless I upgrade to Windows 10 Pro&hellip;because <a href="https://www.microsoft.com">Micro$oft</a>.</p>
+
+      <p><em>I know that I can install <a href="https://docs.docker.com/toolbox/toolbox_install_windows/">Docker Toolbox on Windows</a> for Windows 10 Home but that is just basically running Docker through a VM.</em></p>
+        
+      <p>So I decided to leave Docker and look elsewhere.</p>
+
+      <h3>Vagrant</h3>
+
+      <p>I switched to vanilla <a href="https://www.virtualbox.org">VirtualBox</a> where I create my Linux VMs manually from installation till configuration which became tedious pretty fast. Good thing I discovered <a href="https://www.vagrantup.com">Vagrant</a> which, like Docker, could spawn a virtual environment from a file where all the configurations go.</p>
+
+      <p>Vagrant is cross platform as well, supporting the major OSes. And since I can run VirtualBox on Windows 10 Home no problem, it was also a good fit.</p>
+
+      <p>And so as of this post, I am using Vagrant to handle the creation, configuration and management of my local development environment.</p>
+      
+      <aside><p>A repository of my <code>Vagrantfile</code> can be found <a href="https://github.com/develagasca/web-dev-env">here</a>.</p></aside>
+    </article>
+
+    <hr>
+
+    <footer>
+        <p><a href="/">Home</a></p>
+    </footer>
+
+  </body>
+
+</html>
