@@ -5,3 +5,15 @@
 #tagline {
   font-style: italic;
 }
+
+.latest-date {
+    xfont-size: .8rem;
+    font-style: italic;
+}
+
+h3.latest-title {
+    margin-bottom: 0;
+}
+ul.latest {
+    list-style-type: none;
+}
