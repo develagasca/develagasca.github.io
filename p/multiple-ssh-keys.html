@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="Eric Lagasca">
+  <meta name="description" content="When you have more than one account in a remote DVCS like BitBucket, GitHub and/or GitLab and you want to use SSH keys to push/pull but you are using it on the same computer. What do you do?">
+
+  <title>Multiple SSH Keys for Remote DVCS &raquo; { "dev" : "elagasca" }</title>
+
+  <link rel='stylesheet' href='/static/css/default.css' />
+  <link rel='stylesheet' href='/static/css/styles.css' />
+</head>
+
+<body>
+
+  <header>
+    <p><a href="/">&laquo; Home</a></p>
+  </header>
+
+  <article>
+    <h1>Multiple SSH Keys for Remote DVCS</h1>
+    <aside><em>2019-09-12</em></aside>
+
+    <hr>
+
+    <p>
+      I have multiple developer accounts with remote DVCS services like BitBucket, GitHub and GitLab. This is because I have both work and personal accounts.
+    </p>
+
+    <p>
+      For example, on GitHub I get the ff. error when I try to add the same SSH key I used for my work account to my personal account:
+    </p>
+
+    <p>
+      <img src="/static/images/multiple-ssh-keys-01.gif" alt="Key is already in use error">
+    </p>
+
+    <p>
+      The logical thing to do is to create an SSH key for each account &mdash; this is simple. But there needs to be additional steps so that git doesn't get confused which SSH key to use when cloning, etc.
+    </p>
+
+    <h2>Create the SSH keys</h2>
+
+    <p>
+      Using the <em>ssh-keygen</em> command, create the SSH keys. In my case I will make two, one for work and another for my personal account.
+    </p>
+
+    <p class="codeblock">
+      $ ssh-keygen -o -a 100 -t ed25519 -C "work@email.com" <br>
+      &hellip; <br>
+      $ ssh-keygen -o -a 100 -t ed25519 -C "personal@email.com" <br>
+    </p>
+    
+    <p>
+      I use <em>ed25519</em> but you can use <em>rsa</em> just make sure it's 4096 bits i.e. <em>ssh-keygen -t rsa -b 4096 -C "email@example.com"</em>. You may also add a passphrase; it's not required but recommended.
+    </p>
+
+    <h2>Create the <span class="code">~/.ssh/config</span> file</h2>
+
+    <p>
+      Inside the <span class="code">~/.ssh</span> folder, edit (or create if it doesn't exist) the <span class="code">config</span> file. This file is where we configure which SSH key to use for which account.
+    </p>
+
+    <p class="codeblock">
+      # personal SSH key <br>
+      Host personal.github.com <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;HostName github.com <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;IdentitiesOnly yes <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;IdentityFile ~/.ssh/id_ed25519_personal <br>
+      <br>
+      # work SSH key <br>
+      Host work.github.com <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;HostName github.com <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;IdentitiesOnly yes <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;IdentityFile ~/.ssh/id_ed25519_work <br>
+    </p>
+
+    <p>
+      The value after the <em>Host</em> may be whatever you want it to be. Just remember that it is what you use when cloning with Git.
+    </p>
+
+    <p>
+      Finally change the file mode for <span class="code">config</span> to 600. I experienced an error because of wrong file mode.
+    </p>
+
+    <p class="codeblock">
+      $ chmod 600 ~/.ssh/config
+    </p>
+
+    <aside>
+      <p>If you are curious, read more about the SSH config file <a href="https://linux.die.net/man/5/ssh_config"><strong>here</strong></a>.</p>
+    </aside>
+
+    <h2>Clone accordingly</h2>
+
+    <p>
+      Now it's time to clone the projects. Normally when using git with SSH keys, cloning is done this way:
+    </p>
+
+    <p class="codeblock">
+      $ git clone git@github.com:username/repository.git
+    </p>
+
+    <p>
+      But since we have 2 accounts in 1 computer that uses SSH keys, using the above command confuses git which SSH key to use. This is where the <em>config</em> we did earlier comes in. Remember the value after the <em>Host</em> declaration? That's what you put as the host when doing <span class="code">git clone &hellip;</span>
+    </p>
+
+    <p class="codeblock">
+      $ # cloning using personal SSH key <br>
+      $ git clone git@<strong>personal.github.com</strong>:username/repository.git <br>
+      &hellip; <br>
+      $ # cloning using work SSH key <br>
+      $ git clone git@<strong>work.github.com</strong>:username/repository.git
+    </p>
+
+    <p>
+      If all goes well then cloning git repositories won't end in error.
+    </p>
+
+  </article>
+
+  <hr>
+
+  <footer>
+    <p><a href="/">&laquo; Home</a></p>
+  </footer>
+
+</body>
+
+</html>
