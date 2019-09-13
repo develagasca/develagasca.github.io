@@ -10,3 +10,9 @@ body {
 h1, h2, h3 {
   line-height: 1.2;
 }
+
+img {
+  border: 1px solid #444;
+  max-width: 100%;
+  height: auto;
+}
