@@ -12,7 +12,7 @@ h1, h2, h3 {
 }
 
 img {
-  border: 1px solid #444;
   max-width: 100%;
   height: auto;
+  filter: drop-shadow(4px 4px 8px #444);
 }
